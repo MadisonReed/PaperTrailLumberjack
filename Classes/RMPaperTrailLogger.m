@@ -159,7 +159,9 @@
 
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag
 {
-    NSLog(@"Socket did write data");
+
+#warning JZ Commenting out - this log statement is too noisy
+    //NSLog(@"Socket did write data");
 }
 
 @end

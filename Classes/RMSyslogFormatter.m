@@ -13,21 +13,65 @@ static NSString * const RMAppUUIDKey = @"RMAppUUIDKey";
 
 @implementation RMSyslogFormatter
 
+#warning JZ Locally modified
 - (NSString *)formatLogMessage:(DDLogMessage *)logMessage
 {
     NSString *msg = logMessage.message;
     
+    // See https://tools.ietf.org/html/rfc5424
     NSString *logLevel;
+    NSString *logLevelString;
+    // See http://help.papertrailapp.com/kb/how-it-works/log-colorization/
+    // See https://en.wikipedia.org/wiki/ANSI_escape_code
+    //NSString *ansiEscapeCodeBlack = [NSString stringWithFormat:@"%@%@%@", @"\x1b[3", @"0", @"m"];
+    NSString *ansiEscapeCodeRed = [NSString stringWithFormat:@"%@%@%@", @"\x1b[3", @"1", @"m"];
+    NSString *ansiEscapeCodeGreen = [NSString stringWithFormat:@"%@%@%@", @"\x1b[3", @"2", @"m"];
+    NSString *ansiEscapeCodeYellow = [NSString stringWithFormat:@"%@%@%@", @"\x1b[3", @"3", @"m"];
+    NSString *ansiEscapeCodeBlue = [NSString stringWithFormat:@"%@%@%@", @"\x1b[3", @"4", @"m"];
+    NSString *ansiEscapeCodeMagenta = [NSString stringWithFormat:@"%@%@%@", @"\x1b[3", @"5", @"m"];
+    NSString *ansiEscapeCodeCyan = [NSString stringWithFormat:@"%@%@%@", @"\x1b[3", @"6", @"m"];
+    //NSString *ansiEscapeCodeWhite = [NSString stringWithFormat:@"%@%@%@", @"\x1b[3", @"7", @"m"];
+    NSString *ansiEscapeCodeDefault = @"\x1b[39;49m";
     switch (logMessage.flag)
     {
-        case DDLogFlagError     : logLevel = @"11"; break;
-        case DDLogFlagWarning   : logLevel = @"12"; break;
-        case DDLogFlagInfo      : logLevel = @"14"; break;
-        case DDLogFlagDebug     : logLevel = @"15"; break;
-        case DDLogFlagVerbose   : logLevel = @"15" ; break;
-        default                 : logLevel = @"15"; break;
+        case DDLogFlagDev:
+            logLevel = @"15";
+            logLevelString = [NSString stringWithFormat:@"%@%@%@", @"", @"dev", @""];  // Default
+            break;
+        case DDLogFlagFatal:
+            logLevel = @"10";
+            logLevelString = [NSString stringWithFormat:@"%@%@%@", ansiEscapeCodeMagenta, @"fatal", ansiEscapeCodeDefault];
+            break;
+        case DDLogFlagError:
+            logLevel = @"11";
+            logLevelString = [NSString stringWithFormat:@"%@%@%@", ansiEscapeCodeRed, @"error", ansiEscapeCodeDefault];
+            break;
+        case DDLogFlagWarning:
+            logLevel = @"12";
+            logLevelString = [NSString stringWithFormat:@"%@%@%@", ansiEscapeCodeYellow, @"warn", ansiEscapeCodeDefault];
+            break;
+        case DDLogFlagInfo:
+            logLevel = @"13";
+            logLevelString = [NSString stringWithFormat:@"%@%@%@", ansiEscapeCodeGreen, @"info", ansiEscapeCodeDefault];
+            break;
+        case DDLogFlagDebug:
+            logLevel = @"14";
+            logLevelString = [NSString stringWithFormat:@"%@%@%@", ansiEscapeCodeBlue, @"debug", ansiEscapeCodeDefault];
+            break;
+        case DDLogFlagVerbose:
+            logLevel = @"15";
+            logLevelString = [NSString stringWithFormat:@"%@%@%@", ansiEscapeCodeCyan, @"verbose", ansiEscapeCodeDefault];
+            break;
+        default:
+            logLevel = @"15";
+            logLevelString = [NSString stringWithFormat:@"%@%@%@", ansiEscapeCodeRed, @"unknown", ansiEscapeCodeDefault];
+            break;
     }
     
+    //Also display the file the logging occurred in to ease later debugging
+    //NSString *file = [[[NSString stringWithUTF8String:logMessage->file] lastPathComponent] stringByDeletingPathExtension];
+    NSString *file = [[logMessage->_file lastPathComponent] stringByDeletingPathExtension];
+
     static NSDateFormatter *dateFormatter;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -44,8 +88,10 @@ static NSString * const RMAppUUIDKey = @"RMAppUUIDKey";
     //Get program name
     NSString *programName = [self programName];
     
-    NSString *log = [NSString stringWithFormat:@"<%@>%@ %@ %@: %@ %@@%@@%lu \"%@\"", logLevel, timestamp, machineName, programName, logMessage.threadID, logMessage.fileName, logMessage.function, (unsigned long)logMessage.line, msg];
-    
+    // See http://help.papertrailapp.com/kb/configuration/configuring-centralized-logging-from-ios-or-os-x-apps/
+    //NSString *log = [NSString stringWithFormat:@"<%@>%@ %@ %@: %@ %@@%@@%lu \"%@\"", logLevel, timestamp, machineName, programName, logMessage.threadID, logMessage.fileName, logMessage.function, (unsigned long)logMessage.line, msg];
+    // TODO Change programName to reflect device model
+    NSString *log = [NSString stringWithFormat:@"<%@> %@ %@ %@: %@ %@ %@ %@ (%lu) %@", logLevel, timestamp, programName, machineName, logLevelString, logMessage.threadID, file, logMessage.function, (unsigned long)logMessage.line, msg];
     return log;
 }
 
