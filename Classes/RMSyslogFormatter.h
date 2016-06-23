@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 #import <DDLog.h>
 
-#warning JZ Locally modified
+// MR modification
 static NSString * const RMAppUUIDKey = @"RMAppUUIDKey";
 
 /**
@@ -25,7 +25,7 @@ static NSString * const RMAppUUIDKey = @"RMAppUUIDKey";
  */
 @interface RMSyslogFormatter : NSObject <DDLogFormatter>
 
-#warning JZ Locally modified
+// MR modification
 -(NSString *) machineName;
 -(NSString *) programName;
 

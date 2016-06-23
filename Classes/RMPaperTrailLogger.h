@@ -60,7 +60,7 @@
  */
 - (void)disconnect;
 
-#warning JZ Locally modified
+// MR modification
 /**
  Exposing to allow customization
  */

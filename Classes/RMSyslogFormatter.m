@@ -9,12 +9,12 @@
 
 #import "RMSyslogFormatter.h"
 
-#warning JZ Locally modified
+// MR modification
 //static NSString * const RMAppUUIDKey = @"RMAppUUIDKey";
 
 @implementation RMSyslogFormatter
 
-#warning JZ Locally modified
+// MR modification
 // Note: No longer used -- See MRPaperTrailLogFormatter
 - (NSString *)formatLogMessage:(DDLogMessage *)logMessage
 {
