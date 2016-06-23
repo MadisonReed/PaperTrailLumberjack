@@ -60,4 +60,10 @@
  */
 - (void)disconnect;
 
+#warning JZ Locally modified
+/**
+ Exposing to allow customization
+ */
+- (id <DDLogFormatter>) logFormatter;
+
 @end

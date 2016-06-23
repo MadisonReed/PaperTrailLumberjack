@@ -10,6 +10,9 @@
 #import <Foundation/Foundation.h>
 #import <DDLog.h>
 
+#warning JZ Locally modified
+static NSString * const RMAppUUIDKey = @"RMAppUUIDKey";
+
 /**
  Formats messages in the form of a syslog message.
     The syslog format is defined as follows -
@@ -21,5 +24,9 @@
     message - is the message to be logged.
  */
 @interface RMSyslogFormatter : NSObject <DDLogFormatter>
+
+#warning JZ Locally modified
+-(NSString *) machineName;
+-(NSString *) programName;
 
 @end

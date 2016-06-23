@@ -13,7 +13,8 @@
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
 #import <CocoaAsyncSocket/AsyncSocket.h>
 
-@interface RMPaperTrailLogger () {
+#warning JZ Locally modified
+@interface RMPaperTrailLogger () <GCDAsyncUdpSocketDelegate> {
     GCDAsyncSocket *_tcpSocket;
     GCDAsyncUdpSocket *_udpSocket;
 }
@@ -160,8 +161,13 @@
 - (void)socket:(GCDAsyncSocket *)sock didWriteDataWithTag:(long)tag
 {
 
-#warning JZ Commenting out - this log statement is too noisy
+#warning JZ Locally modified
+    //Commenting out - this log statement is too noisy
     //NSLog(@"Socket did write data");
 }
 
+#warning JZ Locally modified
+- (id<DDLogFormatter>)logFormatter {
+    return self.logFormatter;
+}
 @end
