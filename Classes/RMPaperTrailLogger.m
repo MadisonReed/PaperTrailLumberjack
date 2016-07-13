@@ -11,7 +11,7 @@
 
 #import <CocoaAsyncSocket/GCDAsyncUdpSocket.h>
 #import <CocoaAsyncSocket/GCDAsyncSocket.h>
-#import <CocoaAsyncSocket/AsyncSocket.h>
+//#import <CocoaAsyncSocket/AsyncSocket.h>
 
 // MR modification
 @interface RMPaperTrailLogger () <GCDAsyncUdpSocketDelegate> {

@@ -8,7 +8,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <DDLog.h>
+#import "DDLog.h"
 
 // MR modification
 static NSString * const RMAppUUIDKey = @"RMAppUUIDKey";
